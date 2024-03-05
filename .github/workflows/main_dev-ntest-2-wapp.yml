@@ -1,0 +1,37 @@
+# Docs for the Azure Web Apps Deploy action: https://go.microsoft.com/fwlink/?linkid=2134798
+# More GitHub Actions for Azure: https://go.microsoft.com/fwlink/?linkid=2135048
+
+name: Azure App Service - dev-ntest-2-wapp(Production), Build and deploy container app
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # checkout the repo
+    - name: 'Checkout Github Action'
+      uses: actions/checkout@master
+
+
+    - uses: azure/docker-login@v1
+      with:
+        login-server: devcdrxacr1.azurecr.io/
+        username: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_07699D510DB54FA4B6346AF4D25F9042 }}
+        password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD_E7DB8DE71A87458E8936AB21F24750FD }}
+
+    - run: |
+        docker build . -t devcdrxacr1.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_07699D510DB54FA4B6346AF4D25F9042 }}/ntest-wapp2:${{ github.sha }}
+        docker push devcdrxacr1.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_07699D510DB54FA4B6346AF4D25F9042 }}/ntest-wapp2:${{ github.sha }}
+
+    - uses: azure/webapps-deploy@v2
+      with:
+        app-name: dev-ntest-2-wapp
+        slot-name: Production
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D848AFE5A1CB4CAC90334648905DC823 }}
+        images: devcdrxacr1.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_07699D510DB54FA4B6346AF4D25F9042 }}/ntest-wapp2:${{ github.sha }}
+
