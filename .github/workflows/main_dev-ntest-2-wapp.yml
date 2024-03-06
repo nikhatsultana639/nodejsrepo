@@ -21,17 +21,17 @@ jobs:
     - uses: azure/docker-login@v1
       with:
         login-server: devcdrxacr1.azurecr.io/
-        username: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_B85A0A1D7A794072BE81015B85C02D50 }}
-        password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD_7E91E868748E41518656516D06FEFF35 }}
+        username: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_4E8436EF0D4B4A3F98E5056749607E0F }}
+        password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD_699BB4C5829544718399DAC66D7D51FB }}
 
     - run: |
-        docker build . -t devcdrxacr1.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_B85A0A1D7A794072BE81015B85C02D50 }}/dev-ntest-2-wapp-img:${{ github.sha }}
-        docker push devcdrxacr1.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_B85A0A1D7A794072BE81015B85C02D50 }}/dev-ntest-2-wapp-img:${{ github.sha }}
+        docker build . -t devcdrxacr1.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_4E8436EF0D4B4A3F98E5056749607E0F }}/dev-ntest-2-wapp-img:${{ github.sha }}
+        docker push devcdrxacr1.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_4E8436EF0D4B4A3F98E5056749607E0F }}/dev-ntest-2-wapp-img:${{ github.sha }}
 
     - uses: azure/webapps-deploy@v2
       with:
         app-name: dev-ntest-2-wapp
         slot-name: Production
-        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7F1B8E4F1CAD4A8CB9759AF8F697B645 }}
-        images: devcdrxacr1.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_B85A0A1D7A794072BE81015B85C02D50 }}/dev-ntest-2-wapp-img:${{ github.sha }}
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_22B5B8C2FE5C4B94A1363DF8CEA3385F }}
+        images: devcdrxacr1.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_4E8436EF0D4B4A3F98E5056749607E0F }}/dev-ntest-2-wapp-img:${{ github.sha }}
 
