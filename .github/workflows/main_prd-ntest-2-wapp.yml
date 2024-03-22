@@ -1,0 +1,37 @@
+# Docs for the Azure Web Apps Deploy action: https://go.microsoft.com/fwlink/?linkid=2134798
+# More GitHub Actions for Azure: https://go.microsoft.com/fwlink/?linkid=2135048
+
+name: Azure App Service - prd-ntest-2-wapp(Production), Build and deploy container app
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # checkout the repo
+    - name: 'Checkout Github Action'
+      uses: actions/checkout@master
+
+
+    - uses: azure/docker-login@v1
+      with:
+        login-server: prdcdrxacr1.azurecr.io/
+        username: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_6316C8DF6F834CEE89152923D361E43E }}
+        password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD_B95E4E46AFFB4C1CADCBD21D367876E0 }}
+
+    - run: |
+        docker build . -t prdcdrxacr1.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_6316C8DF6F834CEE89152923D361E43E }}/prd-ntest-2-wapp-img:${{ github.sha }}
+        docker push prdcdrxacr1.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_6316C8DF6F834CEE89152923D361E43E }}/prd-ntest-2-wapp-img:${{ github.sha }}
+
+    - uses: azure/webapps-deploy@v2
+      with:
+        app-name: prd-ntest-2-wapp
+        slot-name: Production
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1F87F9D1A72A482D92C33315786EEC41 }}
+        images: prdcdrxacr1.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_6316C8DF6F834CEE89152923D361E43E }}/prd-ntest-2-wapp-img:${{ github.sha }}
+
